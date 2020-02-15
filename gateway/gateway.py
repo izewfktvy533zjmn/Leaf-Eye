@@ -27,7 +27,7 @@ def handle_xbee(xbee_packet):
         payload_dit = ast.literal_eval((xbee_packet['rf_data']).decode('utf-8'))
         payload_dit['timestamp'] = timestamp
         sub_topic = 'leaf_id:' + str(payload_dit['leaf_id'])
-        mqtt_pub.publish(MAIN_TOPIC + sub_topic, json.dumps(payload_dit), qos=1)
+        mqtt_pub.publish(MAIN_TOPIC + sub_topic, json.dumps(payload_dit), qos=0)
 
     except UnicodeDecodeError: 
         pass

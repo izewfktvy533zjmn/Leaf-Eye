@@ -18,7 +18,7 @@ DB = "leaf_eye"
 
 
 def onConnect(mqtt_sub, user_data, flags, response_code):
-    mqtt_sub.subscribe(MAIN_TOPIC, qos=1)
+    mqtt_sub.subscribe(MAIN_TOPIC, qos=0)
 
 
 def onMessage(mqtt_sub, user_data, msg):
