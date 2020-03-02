@@ -20,5 +20,5 @@
 
 >*GRANT ALL PRIVILEGES ON leaf_eye.* TO 'leaf_eye'@'localhost';*
 
-C>*REATE TABLE data (timestamp TIMESTAMP NOT NULL, leaf_id INT UNSIGNED, temperature FLOAT, humidity FLOAT UNSIGNED, pressure FLOAT UNSIGNED);*
+>*CREATE TABLE data (timestamp TIMESTAMP NOT NULL, leaf_id INT UNSIGNED, temperature FLOAT, humidity FLOAT UNSIGNED, pressure FLOAT UNSIGNED);*
 
