@@ -8,7 +8,8 @@ const con_db  = mysql.createConnection({
 	host: 'localhost',
 	user: 'leaf_eye',
 	password: 'leaf_eye',
-	database: 'leaf_eye'
+	database: 'leaf_eye',
+	timezone: 'jst'
 });
 
 con_db.connect();
