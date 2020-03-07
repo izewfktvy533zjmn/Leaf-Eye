@@ -1,86 +1,25 @@
 #!/usr/bin/env node
 
-const mysql   = require('mysql');
-const express = require('express');
-const app     = express();
-const port    = 8080;
-const con_db  = mysql.createConnection({
-    host: 'localhost',
-    user: 'leaf_eye',
-    password: 'leaf_eye',
-    database: 'leaf_eye'
-});
+const express      = require('express');
+const path         = require('path');
+const favicon      = require('serve-favicon');
+const logger       = require('morgan')
+const cookieParser = require('cookie-parser');
+const bodyParser   = require('body-parser');
 
-con_db.connect();
+const router       = require('./routes/v0/');
 
+const app = express();
+const port = 8080;
 
-app.get('/leaf-eye/api/v0/temperature', function(req, res) {
-    var query = 'select timestamp, temperature from data order by timestamp desc limit 10;';
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 
-    con_db.query(query, (err, rows, fields) => {
-        if (err) {
-            console.log('err: ', err);
-        }
+app.use(logger('dev'));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
+app.use('/leaf-eye/api/v0/', router);
 
-        array = []
-
-        for (i in rows) {
-            var timestamp = rows[i].timestamp;
-            var row = {timestamp: timestamp, temperature: rows[i].temperature};
-            array.push(row);
-        }
-
-        var data = {"temperature": array};
-        res.header('content-type', 'application/json; charset=utf-8');
-        res.send(JSON.stringify(data, null, 1));
-    });
-            
-});
-
-
-app.get('/leaf-eye/api/v0/humidity', function(req, res) {
-    var query = 'select timestamp, humidity from data order by timestamp desc limit 10;';
-    con_db.query(query, (err, rows, fields) => {
-        if (err) {
-            console.log('err: ', err);
-        }
-        
-        array = []
-        
-        for (i in rows) {
-            var row = {timestamp: rows[i].timestamp, humidity: rows[i].humidity};
-            array.push(row)
-        }
-
-        var data = {"humidity": array}
-        res.header('content-type', 'application/json; charset=utf-8');
-        res.send(JSON.stringify(data, null, 1));
-    });
-
-});
-
-
-app.get('/leaf-eye/api/v0/pressure', function(req, res) {
-    var query = 'select timestamp, pressure from data order by timestamp desc limit 10;';
-    con_db.query(query, (err, rows, fields) => {
-        if (err) {
-            console.log('err: ', err);
-        }
-
-        array = []
-        
-        for (i in rows) {
-            var row = {timestamp: rows[i].timestamp, pressure: rows[i].pressure};
-            array.push(row)
-        }
-
-        var data = {"pressure": array}
-        res.header('content-type', 'application/json; charset=utf-8');
-        res.send(JSON.stringify(data, null, 1));
-    });
-
-});
-
-
-app.listen(port);
-
+app.listen(port)
