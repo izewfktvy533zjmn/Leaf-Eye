@@ -74,7 +74,7 @@ router.get(/date/, function(req, res) {
     else if (parameters.length == 8) {
         let startTime = parameters[6];
         let endTime   = parameters[7];
-        var query = 'select timestamp, temperature from data where timestamp between \'' + startDate + ' ' + startTime + '\' and \'' + endDate + ' ' + endTime + '\';';
+        var query = `select timestamp, temperature from data where timestamp "${startDate} ${startTime}" <= timestamp and timestamp < "${endDate} ${endTime}";`;
         console.log(query);
     }
 
