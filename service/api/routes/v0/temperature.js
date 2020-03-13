@@ -15,6 +15,7 @@ const con_db  = mysql.createConnection({
 
 con_db.connect();
 
+
 router.get('/', function(req, res) {
     var query = 'select timestamp, temperature from data order by timestamp desc limit 10;';
 
@@ -37,6 +38,7 @@ router.get('/', function(req, res) {
     });
 
 });
+
 
 router.get(/date/, function(req, res) {
     var parameters = req.path.split('/');
@@ -95,7 +97,6 @@ router.get(/date/, function(req, res) {
         res.header('content-type', 'application/json; charset=utf-8');
         res.send(JSON.stringify(data, null, 1));
     });
-
 
 });
 
