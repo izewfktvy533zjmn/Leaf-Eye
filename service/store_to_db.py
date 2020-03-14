@@ -22,6 +22,9 @@ def onConnect(mqtt_sub, user_data, flags, response_code):
 
 
 def onMessage(mqtt_sub, user_data, msg):
+    db = MySQLdb.connect(host=HOST, user=USER, passwd=PASSWD, db=DB)
+    cur = db.cursor()
+
     payload_dit  = ast.literal_eval(msg.payload.decode('utf-8'))
     timestamp = payload_dit['timestamp']
     leaf_id = payload_dit['leaf_id']
@@ -38,6 +41,8 @@ def onMessage(mqtt_sub, user_data, msg):
         time.sleep(0.001)
 
     db.commit()
+    cur.close()
+    db.close()
 
 
 mqtt_sub = mqtt.Client(protocol=mqtt.MQTTv31)
@@ -45,15 +50,11 @@ mqtt_sub.on_connect = onConnect
 mqtt_sub.on_message = onMessage
 mqtt_sub.connect(host=MQTT_BROKER_ADDR, port=MQTT_BROKER_PORT, keepalive=10)
 
-db = MySQLdb.connect(host=HOST, user=USER, passwd=PASSWD, db=DB)
-cur = db.cursor()
 
 try:
     mqtt_sub.loop_forever()
 
 except KeyboardInterrupt:
     mqtt_sub.disconnect()
-    cur.close()
-    db.close()
     exit(0)
 
